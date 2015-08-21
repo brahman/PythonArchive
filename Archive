@@ -1,0 +1,204 @@
+#String to Integer
+GDP= int(input("GDP IN TRILLIONS:"))
+POP= int(input("POPULATION IN MILLIONS:"))
+total = GDP*POP 
+print(total)
+
+#looping using range and for
+for i in range(3):
+ name = input("Name:")
+ print("Hello",name)
+
+
+#Importing from CSV
+import csv
+with open('ranking.csv', newline='') as csvfile:
+     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+     for row in spamreader:
+         print(', '.join(row))
+
+
+#Reading from CSV and manipulating data
+import csv
+
+bot_volume = 0
+high_bot_volume = 0
+high_bot_volume_date =None
+
+traffic_file = csv.DictReader(open('traffic.csv'))
+
+for row in traffic_file:
+   
+    bot_volume = int(row['BOT_HIT_CNT'])/int(row['TOTAL_HIT_COUNT'])
+
+    if bot_volume > high_bot_volume:
+        high_bot_volume = bot_volume
+        high_bot_volume_date = row['SRC_CRE_DT']   
+     
+
+print(high_bot_volume_date,':', high_bot_volume)
+
+
+
+#Reading from an XML file
+
+import xml.etree.ElementTree as ET
+import csv
+tree = ET.parse('deals.xml')
+root = tree.getroot()
+itemid = 'hello'
+
+
+for DealModule in root.findall('DealModule'):
+    for item in DealModule.iter('Item'):
+            itemid = item.find('ItemId').text
+            LeafCategoryName = item.find('LeafCategoryName').text
+
+            print(itemid,'-', LeafCategoryName )
+
+
+#Reading from an XML file, writing into CSV
+
+import xml.etree.ElementTree as ET
+import csv
+tree = ET.parse('dealsuber.xml')
+root = tree.getroot()
+itemid = 'hello'
+number = 0
+
+with open('hope.csv', 'w', newline='') as csvfile:
+ spamwriter = csv.writer(csvfile)
+ spamwriter.writerow(['itemid'] + ['LeafCategoryName'] )
+
+ for DealModule in root.findall('DealModule'):
+    for item in DealModule.iter('Item'):
+            itemid = item.find('ItemId').text
+            LeafCategoryName = item.find('LeafCategoryName').text
+            number = number +1
+
+            print(itemid,'-', LeafCategoryName )
+
+            spamwriter.writerow([itemid] + [LeafCategoryName] )
+ print('-------------------------------')
+ print('total number of deals processed:', number)
+
+#Reading from an Folder, writing into CSV
+
+import os
+import sys
+import csv
+path = 'C:\\Users\\bnarayanan\\Music\\Malayalam'
+list1 = os.listdir(path)
+
+with open('music.csv', 'w', newline='') as csvfile:
+ spamwriter = csv.writer(csvfile)
+
+ for names in list1:
+
+    print(names)
+    spamwriter.writerow([names])
+
+#Iterating over folders
+
+import os
+import sys
+import csv
+path = 'C:\\Users\\bnarayanan\\Music\\Malayalam'
+list1 = os.listdir(path)
+
+with open('music.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile)
+
+    for names in list1:
+
+        print(names)
+
+        path = 'C:\\Users\\bnarayanan\\Music\\Malayalam\\'+ names
+
+        try:
+         list2 = os.listdir(path)
+        except NotADirectoryError:
+         path = 'C:\\Users\\bnarayanan\\Music\\Malayalam\\Default\\'
+         list2 = os.listdir(path)
+        else:
+
+         for names1 in list2:
+            spamwriter.writerow([names1])
+
+#Reading from xml
+
+
+import xml.etree.ElementTree as ET
+import csv
+import urllib.request
+import string
+
+#reading the feed spurce
+request = "http://deals.ebay.com/feeds/new/xml?count=30"
+response = urllib.request.urlopen(request)
+result_xml = response.read().decode('utf-8')
+
+#replacing ns2: in xml
+result_xml = str.replace(result_xml,'ns2:','')
+
+#parsing the xml
+
+root = ET.fromstring(result_xml)
+
+#itemid = 'hello'
+number = 0
+
+for DealModule in root.findall('DealModule'):
+    for item in DealModule.iter('Item'):
+            itemid = item.find('ItemId').text
+            LeafCategoryName = item.find('LeafCategoryName').text
+            number = number +1
+
+            print(itemid,'-', LeafCategoryName )
+print('-------------------------------')
+print('total number of deals processed:', number)
+
+#median in 2 steps
+
+a = int(input("number 1:"))
+b = int(input("number 2:"))
+c = int(input("number 3:"))
+
+
+if (a-b)*(a-c)<= 0:
+    print("median is:",a)
+
+else:
+    if (b-c) <= 0:
+     print("median is:",b)
+    else:
+         print("median is:",c)
+
+
+#Calling a function
+
+x = int(input("number 1:"))
+y = int(input("number 2:"))
+z = int(input("number 3:"))
+
+def findmedian(a,b,c):
+    if (a-b)*(a-c)<= 0:
+     print("median is:",a)
+    else:
+        if (b-c) <= 0:
+         print("median is:",b)
+        else:
+         print("median is:",c)
+    return
+
+
+findmedian(x,y,z)
+
+   
+  
+
+
+
+
+
+    
