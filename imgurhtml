@@ -1,0 +1,49 @@
+import imgurpython
+client = imgurpython.ImgurClient('4bdb8323559ac96','073384f6ed8b16115855833112d529218e13a13c')
+
+
+class imgury:
+
+ @staticmethod
+ def userjpglist(x):
+    user = x
+    htm1 = ''
+
+    print(user)
+    #favorites = client.get_gallery_favorites(user)
+    count = len(favorites)
+    albumcount = client.get_account_album_count(user)
+
+    client.get_account_images(user)
+
+    print("Number of favorites =" , count)
+    print("Album count =" , albumcount)
+
+    for item in favorites:
+            s = str(item.link)
+
+            if s.endswith('.jpg'):
+                htm = '<img src="' + s + '"/>"'
+                htm1 = htm1 + htm
+    pager = pagemaker()
+    pager.htmlmaker(htm1, x)
+
+
+class pagemaker:
+
+    @staticmethod
+    def htmlmaker(n,namer):
+        html1 = '<!doctype html><html><head><title>Eggs form</title></head><body><a name="top"/><div><br/><br/>'
+        html2 = html1 + n + '</div>'
+        filename = namer + '.html'
+        p = open(filename,'w')
+        p.write(html2)
+        p.close()
+
+
+
+
+# imgurer = imgury()
+#
+# us = input('User Name :')
+# imgurer.userjpglist(us)
