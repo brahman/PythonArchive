@@ -1,0 +1,85 @@
+
+import yahoo_finance
+import csv
+
+
+class getstockdata:
+
+    @staticmethod
+    def yahoorawdata(namer):
+
+        #CSV read and write
+        csvreader = csv.DictReader(open('stocks.csv'))
+        csvfile= open('rawdata.csv', 'w', newline='')
+        rawriter = csv.writer(csvfile)
+        rawriter.writerow(['Symbol'] + ['price']+['volumetrend']+['marketcapraw'] +['dayvolatility']+['volatility']+['yearhigh']+['yearlow']+['day200movingavg']+['day50movingavg']+['priceearningsratio']+['priceearningsgrowthratio']+['growth']+['pricesales']+['pricebook']+['shortratio'] )
+        
+        #html skeleton
+        html1 = '<!doctype html><html><head><title>Eggs form</title></head><body><a name="top"/><div><br/><br/><table>'
+        html2 = '<tr><th>Symbol</th><th>price</th><th>volumetrend</th><th>marketcapraw</th><th>dayvolatility</th><th>volatility</th><th>yearhigh</th><th>yearlow</th><th>day200movingavg</th><th>day50movingavg</th><th>priceearningsratio</th><th>priceearningsgrowthratio</th><th>growth</th><th>pricesales</th><th>pricebook</th><th>shortratio</th></tr>'
+        #more html variables
+        n = ""
+        q = ""
+        filename = namer+'.html'
+
+        for row in csvreader:
+            Symbol = row['SYMBOL']
+            stockdata = yahoo_finance.Share(Symbol)
+
+            
+            #relevant raw data
+            price=stockdata.get_price()
+
+            volume=stockdata.get_volume()
+            prevclose=stockdata.get_prev_close()
+            avgdailyvolume=stockdata.get_avg_daily_volume()
+            stockexchange=stockdata.get_stock_exchange()
+            marketcapraw =stockdata.get_market_cap()
+            dayshigh=stockdata.get_days_high()
+            dayslow=stockdata.get_days_low()
+            yearhigh=stockdata.get_year_high()
+            yearlow=stockdata.get_year_low()
+            day200movingavg=stockdata.get_200day_moving_avg()
+            day50movingavg=stockdata.get_50day_moving_avg()
+            priceearningsratio=stockdata.get_price_earnings_ratio()
+            priceearningsgrowthratio=stockdata.get_price_earnings_growth_ratio()
+            pricesales=stockdata.get_price_sales()
+            pricebook=stockdata.get_price_book()
+            shortratio=stockdata.get_short_ratio()
+
+
+            #computed data
+
+            if not dayshigh or not dayslow or not yearhigh or not yearlow:
+                dayvolatility = 0
+                volatility = 0
+            else:
+
+                dayvolatility = float(dayshigh)/float(dayslow)
+                volatility = (float(yearhigh)-float(yearlow))/float(yearlow)
+
+            volumetrend = int(volume)/int(avgdailyvolume)
+
+            if not priceearningsgrowthratio or not priceearningsratio or float(priceearningsgrowthratio) == 0.00:
+
+                growth = 0
+
+            else:
+
+                growth = float(priceearningsratio)/float(priceearningsgrowthratio)
+
+            #html data
+            n = '<tr><td>'+ Symbol + '</td><td>'+ price + '</td></tr>'
+            q = n + q
+            #print(q)
+
+            #store in csv
+            rawriter.writerow([Symbol] + [price]+[volumetrend]+[marketcapraw] +[dayvolatility]+[volatility]+[yearhigh]+[yearlow]+[day200movingavg]+[day50movingavg]+[priceearningsratio]+[priceearningsgrowthratio]+[growth]+[pricesales]+[pricebook]+[shortratio])
+
+        #create html
+        html3 = html1 + html2 + q + '</table>' + '</div>'
+        print(html3)
+        p = open(filename,'w')
+        p.write(html3)
+        p.close()
+
