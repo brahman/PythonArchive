@@ -1,0 +1,77 @@
+__author__ = 'bnarayanan'
+
+__author__ = 'bnarayanan'
+
+import requests
+import bs4
+import re
+import stringprep
+import string
+
+# r = requests.get('http://productzense.com')
+
+
+for i in range(1,2):
+
+
+    url = ''
+
+    r = requests.get(url)
+    #r = requests.get('http://www.amazon.com/Best-Sellers/zgbs/')
+
+    soup = bs4.BeautifulSoup(r.text, "html.parser")
+
+    #print(soup.prettify())
+
+    #get place name
+    q = soup.findAll('b')
+    for string in q:
+        p = str(string)
+
+        if "<br/></font></b>" not in p:
+            continue
+        else:
+             place = p.replace("<br/></font></b>","")
+             place = place.replace('<b><font color="#009900">','').strip()
+             print('Const|' + place + '|2001')
+
+
+
+
+    #get rest of the data
+    m = soup.findAll('td')
+    for string in m:
+
+     popy = str(string)
+     #print(popy)
+     if "index" not in popy and "Rejected" not in popy:
+
+        popy = popy.replace('<td><b>','').strip()
+        popy = popy.replace('</b></td>','').strip()
+        popy = popy.replace(' align="right"','').strip()
+        popy = popy.replace('</td>','').strip()
+        popy = popy.replace('<td>','').strip()
+        popy = popy.replace('Name of the Candidate','').strip()
+        popy = popy.replace('Party','').strip()
+        popy = popy.replace('Votes','').strip()
+        popy = popy.replace('Percentage','').strip()
+
+
+
+        if popy is not '':
+            print(popy + '|' + place)
+        else:
+            continue
+
+     else:
+        break
+
+
+
+
+
+
+
+
+
+
